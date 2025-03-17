@@ -35,6 +35,12 @@ app.get("/get-results", (req, res) => {
 app.get("/test", (req, res) => {
     res.json({Test:1});
 });
+
+// Handle /tension/server/test
+app.get('/tension/server/test', (req, res) => {
+    res.send('test');
+});
+
 // Start server
 const PORT = 4000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
