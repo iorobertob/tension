@@ -19,15 +19,26 @@ if (fs.existsSync(RESULTS_FILE)) {
 }
 
 // Save user results
-app.post("/save-results", (req, res) => {
+app.post("/tension/server/save-results", (req, res) => {
     const { name, email, phone, tensionData } = req.body;
+
+    // Load existing results
+    let results = [];
+    if (fs.existsSync(RESULTS_FILE)) {
+        results = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf8"));
+    }
+
+    // Add new result
     results.push({ name, email, phone, tensionData });
+
+    // Save updated results to file
     fs.writeFileSync(RESULTS_FILE, JSON.stringify(results, null, 2));
+
     res.sendStatus(200);
 });
 
 // Get stored results
-app.get("/get-results", (req, res) => {
+app.get("/tension/server/get-results", (req, res) => {
     res.json(results);
 });
 

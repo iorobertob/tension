@@ -16,6 +16,9 @@
         .hidden {
             display: none;
         }
+        .form-control {
+            width: 25%; /* Make input fields 1/4 of their original width */
+        }
     </style>
 </head>
 <body>
@@ -38,6 +41,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Continue</button>
             </form>
+            <button id="resultsButton" class="btn btn-secondary mt-3">Results</button>
         </div>
 
         <div id="experimentPage" class="hidden">
@@ -62,13 +66,13 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Timestamp</th>
-                        <th>Tension Level</th>
+                        <th>Tension Levels</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
             <button id="downloadCSV" class="btn btn-secondary mt-3">Download CSV</button>
+            <button id="backButton" class="btn btn-primary mt-3">Back</button>
         </div>
     </div>
 
@@ -76,6 +80,11 @@
         let userData = {};
         let tensionData = [];
         let experimentInterval = null;
+        const allowRetake = false; // Set to true to allow retaking the test
+
+        if (!allowRetake && localStorage.getItem("testCompleted")) {
+            document.body.innerHTML = "<h2>Thank you for participating!</h2>";
+        }
 
         document.getElementById("userForm").addEventListener("submit", function(event) {
             event.preventDefault();
@@ -88,53 +97,66 @@
             document.getElementById("experimentPage").classList.remove("hidden");
         });
 
+        function saveAndRedirect() {
+            clearInterval(experimentInterval);
+            experimentInterval = null;
+            $.post("/tension/server/save-results", {
+                name: userData.name,
+                email: userData.email,
+                phone: userData.phone,
+                tensionData: tensionData
+            }, function() {
+                localStorage.setItem("testCompleted", "true");
+                document.body.innerHTML = "<h2>Thank you for participating!</h2>";
+            }).fail(function() {
+                alert("Error saving your results. Please try again.");
+            });
+        }
+
+        document.getElementById("downloadCSV").addEventListener("click", function() {
+            $.get("/tension/server/get-results", function(data) {
+                let csvContent = "data:text/csv;charset=utf-8,Name,Email,Phone,Tension Levels\n";
+
+                data.forEach(entry => {
+                    csvContent += `"${entry.name}","${entry.email}","${entry.phone}","${entry.tensionData.join(", ")}"\n`;
+                });
+
+                let encodedUri = encodeURI(csvContent);
+                let link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "aggregated_results.csv");
+                document.body.appendChild(link);
+                link.click();
+            }).fail(function() {
+                alert("Error fetching data from the server.");
+            });
+        });
+
         document.getElementById("music").addEventListener("play", function() {
             tensionData = [];
             if (experimentInterval === null) {
                 experimentInterval = setInterval(() => {
-                    tensionData.push({
-                        timestamp: this.currentTime.toFixed(2),
-                        tension: document.getElementById("tensionSlider").value
-                    });
+                    tensionData.push(document.getElementById("tensionSlider").value);
                 }, 500);
             }
         });
 
-        document.getElementById("music").addEventListener("pause", function() {
-            clearInterval(experimentInterval);
-            experimentInterval = null;
+        document.getElementById("music").addEventListener("ended", saveAndRedirect);
+        document.getElementById("finishExperiment").addEventListener("click", saveAndRedirect);
+
+        document.getElementById("resultsButton").addEventListener("click", function() {
+            let password = prompt("Enter password to access results:");
+            if (password === "lmta.2025") {
+                document.getElementById("homePage").classList.add("hidden");
+                document.getElementById("resultsPage").classList.remove("hidden");
+            } else {
+                alert("Incorrect password.");
+            }
         });
 
-        document.getElementById("finishExperiment").addEventListener("click", function() {
-            clearInterval(experimentInterval);
-            experimentInterval = null;
-            document.getElementById("experimentPage").classList.add("hidden");
-            document.getElementById("resultsPage").classList.remove("hidden");
-
-            let resultsTable = $('#resultsTable').DataTable();
-            resultsTable.clear();
-            tensionData.forEach(entry => {
-                resultsTable.row.add([
-                    userData.name,
-                    userData.email,
-                    userData.phone,
-                    entry.timestamp,
-                    entry.tension
-                ]).draw();
-            });
-        });
-
-        document.getElementById("downloadCSV").addEventListener("click", function() {
-            let csvContent = "data:text/csv;charset=utf-8,Name,Email,Phone,Timestamp,Tension Level\n";
-            tensionData.forEach(entry => {
-                csvContent += `"${userData.name}","${userData.email}","${userData.phone}","${entry.timestamp}","${entry.tension}"\n`;
-            });
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "aggregated_results.csv");
-            document.body.appendChild(link);
-            link.click();
+        document.getElementById("backButton").addEventListener("click", function() {
+            document.getElementById("resultsPage").classList.add("hidden");
+            document.getElementById("homePage").classList.remove("hidden");
         });
     </script>
 </body>
