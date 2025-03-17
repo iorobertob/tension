@@ -99,6 +99,7 @@
 
         function saveAndRedirect() {
             clearInterval(experimentInterval);
+            console.log(userData.name);
             experimentInterval = null;
             $.post("/tension/server/save-results", {
                 name: userData.name,
