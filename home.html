@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Perception Experiment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <style>
+        body {
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="homePage">
+            <h2>Welcome to the Music Perception Experiment</h2>
+            <p>Please enter your details to participate.</p>
+            <form id="userForm">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone:</label>
+                    <input type="text" class="form-control" id="phone" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
+        </div>
+
+        <div id="experimentPage" class="hidden">
+            <h2>Music Perception Experiment</h2>
+            <p>Adjust the slider according to your perceived musical tension.</p>
+            <audio id="music" controls>
+                <source src="music.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="mt-3">
+                <label for="tensionSlider" class="form-label">Tension:</label>
+                <input type="range" id="tensionSlider" class="form-range" min="0" max="1" step="0.01">
+            </div>
+            <button id="finishExperiment" class="btn btn-success mt-3">Finish</button>
+        </div>
+
+        <div id="resultsPage" class="hidden">
+            <h2>Experiment Results</h2>
+            <table id="resultsTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Timestamp</th>
+                        <th>Tension Level</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button id="downloadCSV" class="btn btn-secondary mt-3">Download CSV</button>
+        </div>
+    </div>
+
+    <script>
+        let userData = {};
+        let tensionData = [];
+        let experimentInterval = null;
+
+        document.getElementById("userForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            userData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value
+            };
+            document.getElementById("homePage").classList.add("hidden");
+            document.getElementById("experimentPage").classList.remove("hidden");
+        });
+
+        document.getElementById("music").addEventListener("play", function() {
+            tensionData = [];
+            if (experimentInterval === null) {
+                experimentInterval = setInterval(() => {
+                    tensionData.push({
+                        timestamp: this.currentTime.toFixed(2),
+                        tension: document.getElementById("tensionSlider").value
+                    });
+                }, 500);
+            }
+        });
+
+        document.getElementById("music").addEventListener("pause", function() {
+            clearInterval(experimentInterval);
+            experimentInterval = null;
+        });
+
+        document.getElementById("finishExperiment").addEventListener("click", function() {
+            clearInterval(experimentInterval);
+            experimentInterval = null;
+            document.getElementById("experimentPage").classList.add("hidden");
+            document.getElementById("resultsPage").classList.remove("hidden");
+
+            let resultsTable = $('#resultsTable').DataTable();
+            resultsTable.clear();
+            tensionData.forEach(entry => {
+                resultsTable.row.add([
+                    userData.name,
+                    userData.email,
+                    userData.phone,
+                    entry.timestamp,
+                    entry.tension
+                ]).draw();
+            });
+        });
+
+        document.getElementById("downloadCSV").addEventListener("click", function() {
+            let csvContent = "data:text/csv;charset=utf-8,Name,Email,Phone,Timestamp,Tension Level\n";
+            tensionData.forEach(entry => {
+                csvContent += `"${userData.name}","${userData.email}","${userData.phone}","${entry.timestamp}","${entry.tension}"\n`;
+            });
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "aggregated_results.csv");
+            document.body.appendChild(link);
+            link.click();
+        });
+    </script>
+</body>
+</html>
