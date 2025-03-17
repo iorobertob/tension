@@ -80,7 +80,7 @@
         let userData = {};
         let tensionData = [];
         let experimentInterval = null;
-        const allowRetake = false; // Set to true to allow retaking the test
+        const allowRetake = true; // Set to true to allow retaking the test
 
         if (!allowRetake && localStorage.getItem("testCompleted")) {
             document.body.innerHTML = "<h2>Thank you for participating!</h2>";
