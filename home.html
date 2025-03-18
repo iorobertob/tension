@@ -17,7 +17,7 @@
             display: none;
         }
         .form-control {
-            width: 25%; /* Make input fields 1/4 of their original width */
+            width: 25%;
         }
     </style>
 </head>
@@ -80,7 +80,7 @@
         let userData = {};
         let tensionData = [];
         let experimentInterval = null;
-        const allowRetake = true; // Set to true to allow retaking the test
+        const allowRetake = false;
 
         if (!allowRetake && localStorage.getItem("testCompleted")) {
             document.body.innerHTML = "<h2>Thank you for participating!</h2>";
@@ -97,91 +97,16 @@
             document.getElementById("experimentPage").classList.remove("hidden");
         });
 
-        function saveAndRedirect() {
-            clearInterval(experimentInterval);
-            console.log(userData.name);
-            experimentInterval = null;
-
-            let payload = {
-                name: userData.name,
-                email: userData.email,
-                phone: userData.phone,
-                tensionData: tensionData
-            };
-
-            console.log("Sending data:", payload);  // Log data before sending
-
-
-            $.ajax({
-                url: "/tension/server/save-results",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    name: userData.name,
-                    email: userData.email,
-                    phone: userData.phone,
-                    tensionData: tensionData // This will be sent as a JSON array
-                }),
-                success: function() {
-                    localStorage.setItem("testCompleted", "true");
-                    document.body.innerHTML = "<h2>Thank you for participating!</h2>";
-                },
-                error: function(err) {
-                    console.error("Error saving results:", err);
-                    alert("Error saving your results. Please try again.");
-                }
-            });
-        }
-
-        document.getElementById("downloadCSV").addEventListener("click", function() {
-            $.ajax({
-                url: "/tension/server/get-results",
-                type: "GET",
-                cache: false, // Prevent 304 Not Modified issues
-                success: function(data) {
-                    let csvContent = "data:text/csv;charset=utf-8,Name,Email,Phone,Tension Levels\n";
-                    data.forEach(entry => {
-                        csvContent += `"${entry.name}","${entry.email}","${entry.phone}","${entry.tensionData.join(", ")}"\n`;
-                    });
-
-                    let encodedUri = encodeURI(csvContent);
-                    let link = document.createElement("a");
-                    link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", "aggregated_results.csv");
-                    document.body.appendChild(link);
-                    link.click();
-                },
-                error: function(err) {
-                    console.error("Error fetching CSV:", err);
-                    alert("Error downloading CSV. Please try again.");
-                }
-            });
-        });
-
-        document.getElementById("music").addEventListener("play", function() {
-            tensionData = [];
-            if (experimentInterval === null) {
-                experimentInterval = setInterval(() => {
-                    tensionData.push(document.getElementById("tensionSlider").value);
-                }, 500);
-            }
-        });
-
-        document.getElementById("music").addEventListener("ended", saveAndRedirect);
-        
-        document.getElementById("finishExperiment").addEventListener("click", saveAndRedirect);
-
         document.getElementById("resultsButton").addEventListener("click", function() {
             let password = prompt("Enter password to access results:");
             if (password === "lmta.2025") {
                 document.getElementById("homePage").classList.add("hidden");
                 document.getElementById("resultsPage").classList.remove("hidden");
-
-                // Fetch and display results
+                
                 $.ajax({
                     url: "/tension/server/get-results",
                     type: "GET",
-                    cache: false, // Force fresh fetch, prevents 304 issue
+                    cache: false,
                     success: function(data) {
                         let resultsTable = $('#resultsTable').DataTable();
                         resultsTable.clear();
@@ -195,13 +120,35 @@
                         });
                     },
                     error: function(err) {
-                        console.error("Error fetching results:", err);
                         alert("Error loading results. Please try again.");
                     }
                 });
             } else {
                 alert("Incorrect password.");
             }
+        });
+
+        document.getElementById("downloadCSV").addEventListener("click", function() {
+            $.ajax({
+                url: "/tension/server/get-results",
+                type: "GET",
+                cache: false,
+                success: function(data) {
+                    let csvContent = "Name,Email,Phone,Tension Levels\n";
+                    data.forEach(entry => {
+                        csvContent += `"${entry.name}","${entry.email}","${entry.phone}","${entry.tensionData.join(", ")}"\n`;
+                    });
+                    let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                    let link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.setAttribute("download", "aggregated_results.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                },
+                error: function(err) {
+                    alert("Error downloading CSV. Please try again.");
+                }
+            });
         });
 
         document.getElementById("backButton").addEventListener("click", function() {
