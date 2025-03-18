@@ -134,21 +134,27 @@
         }
 
         document.getElementById("downloadCSV").addEventListener("click", function() {
-            $.get("/tension/server/get-results", function(data) {
-                let csvContent = "data:text/csv;charset=utf-8,Name,Email,Phone,Tension Levels\n";
+            $.ajax({
+                url: "/tension/server/get-results",
+                type: "GET",
+                cache: false, // Prevent 304 Not Modified issues
+                success: function(data) {
+                    let csvContent = "data:text/csv;charset=utf-8,Name,Email,Phone,Tension Levels\n";
+                    data.forEach(entry => {
+                        csvContent += `"${entry.name}","${entry.email}","${entry.phone}","${entry.tensionData.join(", ")}"\n`;
+                    });
 
-                data.forEach(entry => {
-                    csvContent += `"${entry.name}","${entry.email}","${entry.phone}","${entry.tensionData.join(", ")}"\n`;
-                });
-
-                let encodedUri = encodeURI(csvContent);
-                let link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "aggregated_results.csv");
-                document.body.appendChild(link);
-                link.click();
-            }).fail(function() {
-                alert("Error fetching data from the server.");
+                    let encodedUri = encodeURI(csvContent);
+                    let link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "aggregated_results.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                },
+                error: function(err) {
+                    console.error("Error fetching CSV:", err);
+                    alert("Error downloading CSV. Please try again.");
+                }
             });
         });
 
@@ -162,6 +168,7 @@
         });
 
         document.getElementById("music").addEventListener("ended", saveAndRedirect);
+        
         document.getElementById("finishExperiment").addEventListener("click", saveAndRedirect);
 
         document.getElementById("resultsButton").addEventListener("click", function() {
@@ -169,6 +176,29 @@
             if (password === "lmta.2025") {
                 document.getElementById("homePage").classList.add("hidden");
                 document.getElementById("resultsPage").classList.remove("hidden");
+
+                // Fetch and display results
+                $.ajax({
+                    url: "/tension/server/get-results",
+                    type: "GET",
+                    cache: false, // Force fresh fetch, prevents 304 issue
+                    success: function(data) {
+                        let resultsTable = $('#resultsTable').DataTable();
+                        resultsTable.clear();
+                        data.forEach(entry => {
+                            resultsTable.row.add([
+                                entry.name,
+                                entry.email,
+                                entry.phone,
+                                entry.tensionData.join(", ")
+                            ]).draw();
+                        });
+                    },
+                    error: function(err) {
+                        console.error("Error fetching results:", err);
+                        alert("Error loading results. Please try again.");
+                    }
+                });
             } else {
                 alert("Incorrect password.");
             }
