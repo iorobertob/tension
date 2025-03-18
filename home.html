@@ -86,6 +86,10 @@
             document.body.innerHTML = "<h2>Thank you for participating!</h2>";
         }
 
+        document.getElementById("music").addEventListener("ended", saveAndRedirect);
+        
+        document.getElementById("finishExperiment").addEventListener("click", saveAndRedirect);
+
         document.getElementById("userForm").addEventListener("submit", function(event) {
             event.preventDefault();
             userData = {
@@ -96,6 +100,42 @@
             document.getElementById("homePage").classList.add("hidden");
             document.getElementById("experimentPage").classList.remove("hidden");
         });
+
+        function saveAndRedirect() {
+            clearInterval(experimentInterval);
+            console.log(userData.name);
+            experimentInterval = null;
+
+            let payload = {
+                name: userData.name,
+                email: userData.email,
+                phone: userData.phone,
+                tensionData: tensionData
+            };
+
+            console.log("Sending data:", payload);  // Log data before sending
+
+
+            $.ajax({
+                url: "/tension/server/save-results",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    name: userData.name,
+                    email: userData.email,
+                    phone: userData.phone,
+                    tensionData: tensionData // This will be sent as a JSON array
+                }),
+                success: function() {
+                    localStorage.setItem("testCompleted", "true");
+                    document.body.innerHTML = "<h2>Thank you for participating!</h2>";
+                },
+                error: function(err) {
+                    console.error("Error saving results:", err);
+                    alert("Error saving your results. Please try again.");
+                }
+            });
+        }
 
         document.getElementById("resultsButton").addEventListener("click", function() {
             let password = prompt("Enter password to access results:");
@@ -135,6 +175,8 @@
                 cache: false,
                 success: function(data) {
                     let csvContent = "Name,Email,Phone,Tension Levels\n";
+                    console.log("data");
+                    console.log(data);
                     data.forEach(entry => {
                         csvContent += `"${entry.name}","${entry.email}","${entry.phone}","${entry.tensionData.join(", ")}"\n`;
                     });
