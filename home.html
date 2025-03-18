@@ -151,12 +151,16 @@
                         let resultsTable = $('#resultsTable').DataTable();
                         resultsTable.clear();
                         data.forEach(entry => {
-                            resultsTable.row.add([
-                                entry.name,
-                                entry.email,
-                                entry.phone,
-                                Array.isArray(entry.tensionData) ? entry.tensionData.join(", ") : "No Data"
-                            ]).draw();
+                            if (entry.name && entry.email && entry.phone) {
+                                resultsTable.row.add([
+                                    entry.name || "Unknown",
+                                    entry.email || "Unknown",
+                                    entry.phone || "Unknown",
+                                    Array.isArray(entry.tensionData) ? entry.tensionData.join(", ") : "No Data"
+                                ]).draw();
+                            } else {
+                                console.warn("Skipping invalid row:", entry);
+                            }
                         });
                     },
                     error: function(err) {
