@@ -45,7 +45,14 @@ app.post("/tension/server/save-results", (req, res) => {
 // Get stored results
 app.get("/tension/server/get-results", (req, res) => {
     res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-    res.json(results);
+
+    // Reload the latest data from results.json
+    let latestResults = [];
+    if (fs.existsSync(RESULTS_FILE)) {
+        latestResults = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf8"));
+    }
+
+    res.json(latestResults);
 });
 
 // Get Test results
