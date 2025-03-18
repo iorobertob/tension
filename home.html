@@ -42,6 +42,21 @@
                 <button type="submit" class="btn btn-primary">Continue</button>
             </form>
             <button id="resultsButton" class="btn btn-secondary mt-3">Results</button>
+
+            <!-- Description Section -->
+            <div class="mt-4">
+                <h3>Description of the Experiment</h3>
+                <p>"The aspects of things that are most important for us are hidden because of their simplicity and familiarity."</p>
+                <p>"Philosophy is a battle against the bewitchment of our intelligence by means of language."</p>
+            </div>
+
+            <!-- Instructions Section -->
+            <div class="mt-4">
+                <h3>Instructions</h3>
+                <p>"If a lion could talk, we could not understand him."</p>
+                <p>"Don't think, but look!"</p>
+            </div>
+            
         </div>
 
         <div id="experimentPage" class="hidden">
@@ -156,6 +171,7 @@
                     url: "/tension/server/get-results",
                     type: "GET",
                     cache: false,
+                    headers: { "Cache-Control": "no-cache, no-store, must-revalidate" }, // Prevent browser caching
                     success: function(data) {
 
                         console.log("data");
@@ -190,6 +206,7 @@
                 url: "/tension/server/get-results",
                 type: "GET",
                 cache: false,
+                headers: { "Cache-Control": "no-cache, no-store, must-revalidate" }, // Prevent browser caching
                 success: function(data) {
                     let csvContent = "Name,Email,Phone,Tension Levels\n";
                     console.log("data");

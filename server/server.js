@@ -44,6 +44,7 @@ app.post("/tension/server/save-results", (req, res) => {
 
 // Get stored results
 app.get("/tension/server/get-results", (req, res) => {
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
     res.json(results);
 });
 
