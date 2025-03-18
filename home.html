@@ -157,6 +157,10 @@
                     type: "GET",
                     cache: false,
                     success: function(data) {
+
+                        console.log("data");
+                        console.log(data);
+
                         let resultsTable = $('#resultsTable').DataTable();
                         resultsTable.clear();
                         data.forEach(entry => {
