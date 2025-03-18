@@ -101,12 +101,18 @@
             clearInterval(experimentInterval);
             console.log(userData.name);
             experimentInterval = null;
-            $.post("/tension/server/save-results", {
+
+            let payload = {
                 name: userData.name,
                 email: userData.email,
                 phone: userData.phone,
                 tensionData: tensionData
-            }, function() {
+            };
+
+            console.log("Sending data:", payload);  // Log data before sending
+
+
+            $.post("/tension/server/save-results", payload, function() {
                 localStorage.setItem("testCompleted", "true");
                 document.body.innerHTML = "<h2>Thank you for participating!</h2>";
             }).fail(function() {
