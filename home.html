@@ -155,7 +155,7 @@
                                 entry.name,
                                 entry.email,
                                 entry.phone,
-                                entry.tensionData.join(", ")
+                                Array.isArray(entry.tensionData) ? entry.tensionData.join(", ") : "No Data"
                             ]).draw();
                         });
                     },
