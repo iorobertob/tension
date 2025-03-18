@@ -112,11 +112,24 @@
             console.log("Sending data:", payload);  // Log data before sending
 
 
-            $.post("/tension/server/save-results", payload, function() {
-                localStorage.setItem("testCompleted", "true");
-                document.body.innerHTML = "<h2>Thank you for participating!</h2>";
-            }).fail(function() {
-                alert("Error saving your results. Please try again.");
+            $.ajax({
+                url: "/tension/server/save-results",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    name: userData.name,
+                    email: userData.email,
+                    phone: userData.phone,
+                    tensionData: tensionData // This will be sent as a JSON array
+                }),
+                success: function() {
+                    localStorage.setItem("testCompleted", "true");
+                    document.body.innerHTML = "<h2>Thank you for participating!</h2>";
+                },
+                error: function(err) {
+                    console.error("Error saving results:", err);
+                    alert("Error saving your results. Please try again.");
+                }
             });
         }
 

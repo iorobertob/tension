@@ -22,7 +22,7 @@ if (fs.existsSync(RESULTS_FILE)) {
 app.post("/tension/server/save-results", (req, res) => {
     const { name, email, phone, tensionData } = req.body;
 
-    if (!name || !email || !phone || !tensionData) {
+    if (!name || !email || !phone || !Array.isArray(tensionData)) {
         console.error("Missing data in request body");
         return res.status(400).send("Missing data in request body");
     }
