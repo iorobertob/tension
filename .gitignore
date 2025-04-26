@@ -1,3 +1,6 @@
 server/results.json
 development/
 development/*
+server/node_modules  
+server/package-lock.json  
+server/package.json
