@@ -394,7 +394,8 @@ $("#viewResultsProtected").click(() => {
                         entry.question7 || "",
                         entry.question8 || "",
                         Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : "",
-                        entry.heardBefore || ""
+                        entry.heardBefore || "",
+                        entry.timestamp || "" 
                     ]).draw();
                 });
             },
