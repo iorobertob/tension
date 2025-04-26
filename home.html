@@ -1,241 +1,421 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Perception Experiment</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <style>
-        body {
-            padding: 20px;
-        }
-        .hidden {
-            display: none;
-        }
-        .form-control {
-            width: 25%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harmoninės Įtampos Eksperimentas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+  <style>
+    body { padding: 20px; }
+    .hidden { display: none; }
+    .form-control, .form-select { width: 50%; }
+    .button-group { display: flex; gap: 10px; margin-top: 20px; }
+    #progressBar { height: 45px; font-size: 16px; line-height: 45px; }
+    .slider-labels { display: flex; justify-content: space-between; margin: 0 10px; }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div id="homePage">
-            <h2>Welcome to the Music Perception Experiment</h2>
-            <p>Please enter your details to participate.</p>
-            <form id="userForm">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name:</label>
-                    <input type="text" class="form-control" id="name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone:</label>
-                    <input type="text" class="form-control" id="phone" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Continue</button>
-            </form>
-            <button id="resultsButton" class="btn btn-secondary mt-3">Results</button>
+<div class="container">
 
-            <!-- Description Section -->
-            <div class="mt-4">
-                <h3>Description of the Experiment</h3>
-                <p>"The aspects of things that are most important for us are hidden because of their simplicity and familiarity."</p>
-                <p>"Philosophy is a battle against the bewitchment of our intelligence by means of language."</p>
-            </div>
+  <div class="progress mb-4">
+    <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 20%;">Žingsnis 1 iš 5</div>
+  </div>
 
-            <!-- Instructions Section -->
-            <div class="mt-4">
-                <h3>Instructions</h3>
-                <p>"If a lion could talk, we could not understand him."</p>
-                <p>"Don't think, but look!"</p>
-            </div>
+  <button id="viewResultsProtected" class="btn btn-warning mb-4">Peržiūrėti Rezultatus (Administratoriui)</button>
 
-        </div>
+  <!-- STAGE 1: Description and Instructions -->
+  <div id="stage1">
+    <h2>Harmoninės Įtampos Eksperimentas</h2>
 
-        <div id="experimentPage" class="hidden">
-            <h2>Music Perception Experiment</h2>
-            <p>Adjust the slider according to your perceived musical tension.</p>
-            <audio id="music" controls>
-                <source src="music.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-            <div class="mt-3">
-                <label for="tensionSlider" class="form-label">Tension:</label>
-                <input type="range" id="tensionSlider" class="form-range" min="0" max="1" step="0.01">
-            </div>
-            <button id="finishExperiment" class="btn btn-success mt-3">Finish</button>
-        </div>
+    <h4>Aprašymas</h4>
+    <p>
+      Sveiki, esu Aušrinė Butvydaitė, muzikos tyrimų bakalauro trečio kurso studentė Lietuvos Muzikos ir Teatro Akademijoje.
+      Šiuo metu rašau kursinį darbą „Harmoninės įtampos fenomenas: sąvokos kontūrai skirtinguose teoriniuose modeliuose“ ir
+      atlieku akustinį eksperimentą su dvejomis klausytojų grupėmis (muzikos profesionalai/muzikos neprofesionalai).
+      Akustinio eksperimento tikslas – išsiaiškinti kaip dviejų grupių klausytojai suvokia įtampą pateiktoje muzikinio kūrinio
+      ištraukoje (muzikinės ištraukos trukmė 2-3 min.). Prieš tai bus pateiktas bandomasis testas.
+    </p>
+    <p>
+      Pradžioje Jums bus pateiktas klausimynas su aštuoniais uždarais klausimais (klausimyno pildymo laikas maždaug 5 min.).
+      Šis klausimynas padės suskirstyti eksperimento dalyvius į dvi klausytojų grupes (muzikos profesionalai/muzikos neprofesionalai).
+      Po šio klausimyno Jūs būsite perkeltas/-a į bandomąjį akustinį eksperimentą.
+    </p>
+    <p>
+      Jūsų duomenys yra anoniminiai ir viešai neskelbiami. Jūsų dalyvavimas yra vertingas ir padės tobulinti mokslinio tyrimo rezultatus.
+    </p>
 
-        <div id="resultsPage" class="hidden">
-            <h2>Experiment Results</h2>
-            <table id="resultsTable" class="display">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Tension Levels</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <button id="downloadCSV" class="btn btn-secondary mt-3">Download CSV</button>
-            <button id="backButton" class="btn btn-primary mt-3">Back</button>
-        </div>
+    <h4>Instrukcija akustiniam eksperimentui</h4>
+    <p>
+      Pirmasis akustinio eksperimento langas yra bandomasis testas. Jame galite išbandyti kaip veikia pats akustinis eksperimentas.
+    </p>
+    <p>
+      Atsidarę langą, matysite muzikinio kūrinio ištrauką, kurią galite paleisti ir reguliuoti jos garsumą. Apačioje matysite liniją su mėlynu apskritimu.
+      Kuomet groja kūrinys, Jūs slankiojate mėlyną apskritimą ant linijos į kairę ir į dešinę pusę, o apskritimas automatiškai fiksuoja Jūsų pažymėtą vietą.
+      Kiekvienas įtampos matavimas fiksuojamas nustatytu laiko intervalu (0,5 s).
+    </p>
+    <p>
+      Kairė pusė reiškia „mažiausia įtampa“, o dešinė pusė – „didžiausia įtampa“.
+    </p>
+    <p>
+      Kai norėsite baigti bandomąjį testą, galėsite pereiti į antrąjį langą, kuriame bus akustiniam eksperimentui parinktas kūrinys.
+      Jame girdėsite fortepijonu grojamus akordus. Paleiskite muzikinę ištrauką ir išgirdę akordą, kuo sparčiau nustatykite jo įtampos lygį.
+    </p>
+    <p>
+      Kai baigsite užduotį, Jūsų lauks paskutinis klausimas: ar esate girdėjęs/-usi šią muzikinę ištrauką anksčiau? Jei ne, palikite atsakymą tuščią.
+    </p>
+    <p>
+      Baigę visas užduotis ir atsakę į klausimą, spauskite „Finish“, kad išsisaugotų Jūsų atsakymai ir įtampos vertinimai.
+      Jei kiltų klausimų, rašykite: <strong>ausrine.butvydaite@stud.lmta.lt</strong>.
+    </p>
+
+    <div class="button-group">
+      <button id="toQuestionnaire" class="btn btn-primary">Pereiti į klausimyną</button>
     </div>
+  </div>
 
-    <script>
-        let userData = {};
-        let tensionData = [];
-        let experimentInterval = null;
-        const allowRetake = true;
+  <!-- STAGE 2: Questionnaire -->
+  <div id="stage2" class="hidden">
+    <h2>Klausimynas</h2>
+    <form id="questionnaireForm">
+      <div class="mb-3">
+        <label class="form-label">1. Koks Jūsų amžius?</label>
+        <input type="number" class="form-control question" required>
+      </div>
 
-        if (!allowRetake && localStorage.getItem("testCompleted")) {
-            document.body.innerHTML = "<h2>Thank you for participating!</h2>";
+      <div class="mb-3">
+        <label class="form-label">2. Nuo kokio amžiaus pradėjote mokytis muzikos? (Įrašykite 0 jei nesimokėte)</label>
+        <input type="number" class="form-control question" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">3. Kiek metų užsiėmėte reguliaria, kasdiene muzikos veikla? (Įrašykite 0 jei niekada)</label>
+        <input type="number" class="form-control question" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">4. Kiek laiko šiuo metu skiriate grojimui ar dainavimui?</label>
+        <select class="form-select question" required>
+          <option value="">Pasirinkite</option>
+          <option>Aš niekada neskiriu laiko / labai retai</option>
+          <option>1 val. per mėnesį</option>
+          <option>1 val. per savaitę</option>
+          <option>15 min. per dieną</option>
+          <option>1 val. per dieną</option>
+          <option>Daugiau nei 2 val. per dieną</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">5. Kokį muzikinį išsilavinimą esate pasiekęs?</label>
+        <select class="form-select question" required>
+          <option value="">Pasirinkite</option>
+          <option>Jokio</option>
+          <option>Muzikos mokykla (7 ar 10 metų)</option>
+          <option>Konservatorija / Menų mokykla</option>
+          <option>Bakalauro 1 kursas</option>
+          <option>Bakalauro 2 kursas</option>
+          <option>Bakalauro 3 kursas</option>
+          <option>Bakalauro 4 kursas</option>
+          <option>Magistro 1 kursas</option>
+          <option>Magistro 2 kursas</option>
+          <option>Doktorantūros 1 kursas</option>
+          <option>Doktorantūros 2 kursas</option>
+          <option>Doktorantūros 3 kursas</option>
+          <option>Doktorantūros 4 kursas</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">6. Kokia jūsų patirtis komponuojant muziką?</label>
+        <select class="form-select question" required>
+          <option value="">Pasirinkite</option>
+          <option>Niekada nekūriau muzikos</option>
+          <option>Kūriau nedaug kūrinių, neužbaigtų</option>
+          <option>Užbaigiau kūrinius, bet jie nebuvo viešai atliekami</option>
+          <option>Kūrinius atliko viešai</option>
+          <option>Kūrinius atliko regioniniu / tarptautiniu mastu</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">7. Kiek gyvo garso koncertų aplankėte per paskutinius 12 mėnesių?</label>
+        <select class="form-select question" required>
+          <option value="">Pasirinkite</option>
+          <option>Neapsilankiau</option>
+          <option>1-4 koncertai</option>
+          <option>5-8 koncertai</option>
+          <option>9-12 koncertų</option>
+          <option>13 ar daugiau</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">8. Kuris pavadinimas geriausiai Jus apibūdina?</label>
+        <select class="form-select question" required>
+          <option value="">Pasirinkite</option>
+          <option>Nemuzikantas</option>
+          <option>Muzikos mėgėjas nemuzikantas</option>
+          <option>Muzikantas amatininkas</option>
+          <option>Profesionalus muzikantas amatininkas</option>
+          <option>Pusiau profesionalus muzikantas</option>
+          <option>Profesionalus muzikantas</option>
+        </select>
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">Tęsti į Bandomąjį Testą</button>
+        <button type="button" class="btn btn-secondary" id="backToStage1">Grįžti</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- STAGE 3 -->
+  <div id="stage3" class="hidden">
+    <h2>Pilot Test</h2>
+    <p>Please listen to the example music and adjust the slider based on the tension you perceive.</p>
+    <audio id="pilotAudio" controls>
+      <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    <div class="mt-3">
+      <div class="slider-labels">
+        <span>Low</span>
+        <span>High</span>
+      </div>
+      <input type="range" id="pilotSlider" class="form-range" min="0" max="1" step="0.01">
+    </div>
+    <div class="button-group">
+      <button id="toMainTest" class="btn btn-success">Proceed to Main Test</button>
+      <button type="button" class="btn btn-secondary" id="backToStage2">Back</button>
+    </div>
+  </div>
+
+  <!-- STAGE 4 -->
+  <div id="stage4" class="hidden">
+    <h2>Main Test</h2>
+    <p>Listen carefully and adjust the slider to reflect the musical tension you feel.</p>
+    <audio id="mainAudio" controls>
+      <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    <div class="mt-3">
+      <div class="slider-labels">
+        <span>Low</span>
+        <span>High</span>
+      </div>
+      <input type="range" id="mainSlider" class="form-range" min="0" max="1" step="0.01">
+    </div>
+    <div class="mt-4">
+      <label for="heardBefore" class="form-label">Have you heard this piece of music before?</label>
+      <select id="heardBefore" class="form-select" required>
+        <option value="">--Please choose an option--</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+    <div class="button-group">
+      <button id="finishButton" class="btn btn-primary">Finish</button>
+      <button type="button" class="btn btn-secondary" id="backToStage3">Back</button>
+    </div>
+  </div>
+
+  <!-- STAGE 5 -->
+  <div id="stage5" class="hidden">
+    <h2>Thank You!</h2>
+    <p>Thank you for your participation!</p>
+    <p>If you are interested in the results of the survey, please email: <strong>ausrine.butvydaite@stud.lmta.lt</strong></p>
+  </div>
+
+  <!-- RESULTS PAGE -->
+  <div id="resultsPage" class="hidden">
+    <h2>Experiment Results</h2>
+    <table id="resultsTable" class="display">
+      <thead>
+        <tr>
+          <th>Questionnaire</th>
+          <th>Main Tension</th>
+          <th>Heard Before</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button id="downloadCSV" class="btn btn-secondary mt-3">Download CSV</button>
+    <button id="backButtonResults" class="btn btn-primary mt-3">Back</button>
+  </div>
+
+</div>
+
+<script>
+let mainTensionData = [];
+let questionnaireAnswers = [];
+let mainInterval = null;
+const allowRetake = true;
+
+// Prevent retake
+if (!allowRetake && localStorage.getItem("testCompleted") === "true") {
+    document.body.innerHTML = "<h2>Thank you, you have already participated.</h2>";
+}
+
+// Progress bar updater
+function updateProgress(step) {
+    let percent = step * 20;
+    $("#progressBar").css("width", percent + "%");
+    $("#progressBar").text(`Step ${step} of 5`);
+}
+
+// Navigation between stages
+$("#toQuestionnaire").click(() => {
+    $("#stage1").addClass("hidden");
+    $("#stage2").removeClass("hidden");
+    updateProgress(2);
+});
+
+$("#questionnaireForm").submit(function(event) {
+    event.preventDefault();
+    questionnaireAnswers = [];
+    $('.question').each(function() {
+        questionnaireAnswers.push($(this).val());
+    });
+    $("#stage2").addClass("hidden");
+    $("#stage3").removeClass("hidden");
+    updateProgress(3);
+});
+
+$("#toMainTest").click(() => {
+    document.getElementById("pilotAudio").pause();  // Stop pilot audio
+    $("#stage3").addClass("hidden");
+    $("#stage4").removeClass("hidden");
+    updateProgress(4);
+});
+
+$("#finishButton").click(() => {
+    const heardBefore = $("#heardBefore").val();
+    if (!heardBefore) {
+        alert("Please answer if you have heard the piece before.");
+        return;
+    }
+    document.getElementById("mainAudio").pause();  // Stop main audio
+    clearInterval(mainInterval);
+
+    // Save to server (only questionnaire + main tension + heardBefore)
+    $.ajax({
+        url: "https://misc.lmta.lt/tension/server/save-results",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            questionnaireAnswers: questionnaireAnswers,
+            mainTensionData: mainTensionData,
+            heardBefore: heardBefore
+        }),
+        success: function() {
+            localStorage.setItem("testCompleted", "true");
+            $("#stage4").addClass("hidden");
+            $("#stage5").removeClass("hidden");
+            updateProgress(5);
+        },
+        error: function(err) {
+            console.error("Error saving results:", err);
+            alert("Error saving your results. Please try again.");
         }
+    });
+});
 
-        document.getElementById("music").addEventListener("play", function() {
-            tensionData = [];
-            if (experimentInterval === null) {
-                experimentInterval = setInterval(() => {
-                    tensionData.push(document.getElementById("tensionSlider").value);
-                }, 500);
-            }
-        });
+// Back buttons
+$("#backToStage1").click(() => {
+    $("#stage2").addClass("hidden");
+    $("#stage1").removeClass("hidden");
+    updateProgress(1);
+});
+$("#backToStage2").click(() => {
+    $("#stage3").addClass("hidden");
+    $("#stage2").removeClass("hidden");
+    updateProgress(2);
+});
+$("#backToStage3").click(() => {
+    $("#stage4").addClass("hidden");
+    $("#stage3").removeClass("hidden");
+    updateProgress(3);
+});
+$("#backButtonResults").click(() => {
+    $("#resultsPage").addClass("hidden");
+    $("#stage1").removeClass("hidden");
+    updateProgress(1);
+});
 
-        document.getElementById("music").addEventListener("ended", saveAndRedirect);
-        
-        document.getElementById("finishExperiment").addEventListener("click", saveAndRedirect);
+// Collect main tension every 500ms
+$("#mainAudio").on("play", () => {
+    mainTensionData = [];
+    mainInterval = setInterval(() => {
+        mainTensionData.push($("#mainSlider").val());
+    }, 500);
+});
+$("#mainAudio").on("ended", () => {
+    clearInterval(mainInterval);
+});
 
-        document.getElementById("userForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            userData = {
-                name: document.getElementById("name").value,
-                email: document.getElementById("email").value,
-                phone: document.getElementById("phone").value
-            };
-            document.getElementById("homePage").classList.add("hidden");
-            document.getElementById("experimentPage").classList.remove("hidden");
-        });
+// View results protected by password
+$("#viewResultsProtected").click(() => {
+    const password = prompt("Enter password:");
+    if (password === "lmta") {
+        $("#stage1, #stage2, #stage3, #stage4, #stage5").addClass("hidden");
+        $("#resultsPage").removeClass("hidden");
 
-        function saveAndRedirect() {
-            clearInterval(experimentInterval);
-            console.log(userData.name);
-            experimentInterval = null;
-
-            let payload = {
-                name: userData.name,
-                email: userData.email,
-                phone: userData.phone,
-                tensionData: tensionData
-            };
-
-            console.log("Sending data:", payload);  // Log data before sending
-
-
-            $.ajax({
-                url: "/tension/server/save-results",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    name: userData.name,
-                    email: userData.email,
-                    phone: userData.phone,
-                    tensionData: tensionData // This will be sent as a JSON array
-                }),
-                success: function() {
-                    localStorage.setItem("testCompleted", "true");
-                    document.body.innerHTML = "<h2>Thank you for participating!</h2>";
-                },
-                error: function(err) {
-                    console.error("Error saving results:", err);
-                    alert("Error saving your results. Please try again.");
-                }
-            });
-        }
-
-        document.getElementById("resultsButton").addEventListener("click", function() {
-            let password = prompt("Enter password to access results:");
-            if (password === "lmta.2025") {
-                document.getElementById("homePage").classList.add("hidden");
-                document.getElementById("resultsPage").classList.remove("hidden");
-                
-                $.ajax({
-                    url: "/tension/server/get-results",
-                    type: "GET",
-                    cache: false,
-                    headers: { "Cache-Control": "no-cache, no-store, must-revalidate" }, // Prevent browser caching
-                    success: function(data) {
-
-                        console.log("data");
-                        console.log(data);
-
-                        let resultsTable = $('#resultsTable').DataTable();
-                        resultsTable.clear();
-                        data.forEach(entry => {
-                            if (entry.name && entry.email && entry.phone) {
-                                resultsTable.row.add([
-                                    entry.name || "Unknown",
-                                    entry.email || "Unknown",
-                                    entry.phone || "Unknown",
-                                    Array.isArray(entry.tensionData) ? entry.tensionData.join(", ") : "No Data"
-                                ]).draw();
-                            } else {
-                                console.warn("Skipping invalid row:", entry);
-                            }
-                        });
-                    },
-                    error: function(err) {
-                        alert("Error loading results. Please try again.");
-                    }
+        $.ajax({
+            url: "https://misc.lmta.lt/tension/server/get-results",
+            type: "GET",
+            cache: false,
+            headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
+            success: function(data) {
+                let table = $('#resultsTable').DataTable({ destroy: true });
+                table.clear();
+                data.forEach(entry => {
+                    table.row.add([
+                        Array.isArray(entry.questionnaireAnswers) ? entry.questionnaireAnswers.join(" | ") : "No Data",
+                        Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : "No Data",
+                        entry.heardBefore || "No Answer"
+                    ]).draw();
                 });
-            } else {
-                alert("Incorrect password.");
+            },
+            error: function(err) {
+                console.error("Error loading results:", err);
+                alert("Error loading results. Please try again.");
             }
         });
+    } else {
+        alert("Incorrect password.");
+    }
+});
 
-        document.getElementById("downloadCSV").addEventListener("click", function() {
-            $.ajax({
-                url: "/tension/server/get-results",
-                type: "GET",
-                cache: false,
-                headers: { "Cache-Control": "no-cache, no-store, must-revalidate" }, // Prevent browser caching
-                success: function(data) {
-                    let csvContent = "Name,Email,Phone,Tension Levels\n";
-                    console.log("data");
-                    console.log(data);
-                    data.forEach(entry => {
-                        if (entry.name && entry.email && entry.phone) {
-                            csvContent += `"${entry.name}","${entry.email}","${entry.phone}","${Array.isArray(entry.tensionData) ? entry.tensionData.join(", ") : "No Data"}"\n`;
-                        } else {
-                            console.warn("Skipping invalid row:", entry);
-                        }
-                        
-                    });
-                    let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-                    let link = document.createElement("a");
-                    link.href = URL.createObjectURL(blob);
-                    link.setAttribute("download", "aggregated_results.csv");
-                    document.body.appendChild(link);
-                    link.click();
-                },
-                error: function(err) {
-                    alert("Error downloading CSV. Please try again.");
-                }
+// Download CSV
+$("#downloadCSV").click(() => {
+    $.ajax({
+        url: "https://misc.lmta.lt/tension/server/get-results",
+        type: "GET",
+        cache: false,
+        headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
+        success: function(data) {
+            let csvContent = "Questionnaire Answers,Main Tension,Heard Before\n";
+            data.forEach(entry => {
+                csvContent += `"${Array.isArray(entry.questionnaireAnswers) ? entry.questionnaireAnswers.join(" | ") : ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : ""}","${entry.heardBefore || ""}"\n`;
             });
-        });
+            let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", "aggregated_results.csv");
+            document.body.appendChild(link);
+            link.click();
+        },
+        error: function(err) {
+            console.error("Error downloading CSV:", err);
+            alert("Error downloading CSV. Please try again.");
+        }
+    });
+});
+</script>
 
-        document.getElementById("backButton").addEventListener("click", function() {
-            document.getElementById("resultsPage").classList.add("hidden");
-            document.getElementById("homePage").classList.remove("hidden");
-        });
-    </script>
 </body>
 </html>

@@ -7,34 +7,34 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Serve static files from the /tension folder
+// Serve static files (if needed)
 app.use(express.static(path.join(__dirname, "../")));
 
 const RESULTS_FILE = path.join(__dirname, "results.json");
 
-// Load existing results or create an empty file if not found
+// Load existing results or create an empty file
 let results = [];
 if (fs.existsSync(RESULTS_FILE)) {
     results = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf8"));
 }
 
-// Save user results
+// Save user results (new structure)
 app.post("/tension/server/save-results", (req, res) => {
-    const { name, email, phone, tensionData } = req.body;
+    const { questionnaireAnswers, mainTensionData, heardBefore } = req.body;
 
-    if (!name || !email || !phone || !Array.isArray(tensionData)) {
-        console.error("Missing data in request body");
-        return res.status(400).send("Missing data in request body");
+    if (!Array.isArray(questionnaireAnswers) || !Array.isArray(mainTensionData) || (typeof heardBefore !== "string")) {
+        console.error("Invalid or missing data in request body");
+        return res.status(400).send("Invalid or missing data in request body");
     }
 
-    // Load existing results
+    // Load existing results again to avoid conflicts
     let results = [];
     if (fs.existsSync(RESULTS_FILE)) {
         results = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf8"));
     }
 
     // Add new result
-    results.push({ name, email, phone, tensionData });
+    results.push({ questionnaireAnswers, mainTensionData, heardBefore });
 
     // Save updated results to file
     fs.writeFileSync(RESULTS_FILE, JSON.stringify(results, null, 2));
@@ -46,7 +46,6 @@ app.post("/tension/server/save-results", (req, res) => {
 app.get("/tension/server/get-results", (req, res) => {
     res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
-    // Reload the latest data from results.json
     let latestResults = [];
     if (fs.existsSync(RESULTS_FILE)) {
         latestResults = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf8"));
@@ -55,14 +54,14 @@ app.get("/tension/server/get-results", (req, res) => {
     res.json(latestResults);
 });
 
-// Get Test results
+// Test route
 app.get("/test", (req, res) => {
-    res.json({Test:1});
+    res.json({ test: 1 });
 });
 
-// Handle /tension/server/test
-app.get('/tension/server/test', (req, res) => {
-    res.send('test');
+// Additional test route for /tension/server/test
+app.get("/tension/server/test", (req, res) => {
+    res.send("test");
 });
 
 // Start server
