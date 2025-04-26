@@ -7,10 +7,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Serve static files
-app.use(express.static(path.join(__dirname, "../")));
-
 const RESULTS_FILE = path.join(__dirname, "results.json");
+
+// Ensure results.json exists
+if (!fs.existsSync(RESULTS_FILE)) {
+    fs.writeFileSync(RESULTS_FILE, "[]", "utf8");
+    console.log("Created missing results.json");
+}
 
 // Save user results
 app.post("/tension/server/save-results", (req, res) => {
@@ -26,7 +29,6 @@ app.post("/tension/server/save-results", (req, res) => {
         return res.status(400).send("Questionnaire must have exactly 8 answers");
     }
 
-    // Create structured object
     const participantData = {
         question1: questionnaireAnswers[0],
         question2: questionnaireAnswers[1],
@@ -37,19 +39,25 @@ app.post("/tension/server/save-results", (req, res) => {
         question7: questionnaireAnswers[6],
         question8: questionnaireAnswers[7],
         mainTensionData: mainTensionData,
-        heardBefore: heardBefore
+        heardBefore: heardBefore,
+        timestamp: new Date().toISOString()
     };
 
-    // Load current results
     let results = [];
-    if (fs.existsSync(RESULTS_FILE)) {
-        results = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf8"));
+    try {
+        const raw = fs.readFileSync(RESULTS_FILE, "utf8");
+        results = JSON.parse(raw);
+        if (!Array.isArray(results)) {
+            console.warn("results.json was not an array. Resetting.");
+            results = [];
+        }
+    } catch (err) {
+        console.error("Error reading results.json:", err);
+        results = [];
     }
 
-    // Add new result
     results.push(participantData);
 
-    // Save updated results
     fs.writeFileSync(RESULTS_FILE, JSON.stringify(results, null, 2));
 
     res.sendStatus(200);
@@ -60,8 +68,12 @@ app.get("/tension/server/get-results", (req, res) => {
     res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
     let latestResults = [];
-    if (fs.existsSync(RESULTS_FILE)) {
-        latestResults = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf8"));
+    try {
+        const raw = fs.readFileSync(RESULTS_FILE, "utf8");
+        latestResults = JSON.parse(raw);
+    } catch (err) {
+        console.error("Error reading results.json:", err);
+        latestResults = [];
     }
 
     res.json(latestResults);
