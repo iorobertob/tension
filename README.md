@@ -105,7 +105,7 @@ pm2 reload node_server_tension
 ##  Important 
 
 - **Permissions**:  
-  `server/results.json` should be writable:
+  `server/results.json` should be writable, and inside a folder owned by the webserver:
   ```bash
   chmod 666 server/results.json
   ```
