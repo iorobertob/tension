@@ -24,7 +24,7 @@
 <div class="container">
 
   <div class="progress mb-4">
-    <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 20%;">Žingsnis 1 iš 5</div>
+    <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 20%; height: auto;">Step 1 of 5</div>
   </div>
 
   <button id="viewResultsProtected" class="btn btn-warning mb-4">Peržiūrėti Rezultatus (Administratoriui)</button>
@@ -398,14 +398,14 @@ $("#downloadCSV").click(() => {
         cache: false,
         headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
         success: function(data) {
-            let csvContent = "Questionnaire Answers,Main Tension,Heard Before\n";
+            let csvContent = "Question1,Question2,Question3,Question4,Question5,Question6,Question7,Question8,Main Tension Data,Heard Before\n";
             data.forEach(entry => {
-                csvContent += `"${Array.isArray(entry.questionnaireAnswers) ? entry.questionnaireAnswers.join(" | ") : ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : ""}","${entry.heardBefore || ""}"\n`;
+                csvContent += `"${entry.question1 || ""}","${entry.question2 || ""}","${entry.question3 || ""}","${entry.question4 || ""}","${entry.question5 || ""}","${entry.question6 || ""}","${entry.question7 || ""}","${entry.question8 || ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : ""}","${entry.heardBefore || ""}"\n`;
             });
             let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
             let link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", "aggregated_results.csv");
+            link.setAttribute("download", "experiment_results.csv");
             document.body.appendChild(link);
             link.click();
         },
