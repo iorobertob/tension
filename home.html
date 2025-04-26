@@ -233,11 +233,18 @@
   <!-- RESULTS PAGE -->
   <div id="resultsPage" class="hidden">
     <h2>Experiment Results</h2>
-    <table id="resultsTable" class="display">
+    <table id="resultsTable" class="display nowrap" style="width:100%">
       <thead>
         <tr>
-          <th>Questionnaire</th>
-          <th>Main Tension</th>
+          <th>Question 1</th>
+          <th>Question 2</th>
+          <th>Question 3</th>
+          <th>Question 4</th>
+          <th>Question 5</th>
+          <th>Question 6</th>
+          <th>Question 7</th>
+          <th>Question 8</th>
+          <th>Main Tension Data</th>
           <th>Heard Before</th>
         </tr>
       </thead>
@@ -370,13 +377,23 @@ $("#viewResultsProtected").click(() => {
             cache: false,
             headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
             success: function(data) {
-                let table = $('#resultsTable').DataTable({ destroy: true });
+                let table = $('#resultsTable').DataTable({
+                    destroy: true,
+                    responsive: true // <<< make it automatically collapse when table is too wide
+                });
                 table.clear();
                 data.forEach(entry => {
                     table.row.add([
-                        Array.isArray(entry.questionnaireAnswers) ? entry.questionnaireAnswers.join(" | ") : "No Data",
-                        Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : "No Data",
-                        entry.heardBefore || "No Answer"
+                        entry.question1 || "",
+                        entry.question2 || "",
+                        entry.question3 || "",
+                        entry.question4 || "",
+                        entry.question5 || "",
+                        entry.question6 || "",
+                        entry.question7 || "",
+                        entry.question8 || "",
+                        Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : "",
+                        entry.heardBefore || ""
                     ]).draw();
                 });
             },
