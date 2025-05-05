@@ -435,7 +435,7 @@ $("#downloadCSVWindows").click(() => {
         success: function(data) {
             let csvContent = "Question1;Question2;Question3;Question4;Question5;Question6;Question7;Question8;Main Tension Data;Heard Before;Timestamp\n";
             data.forEach(entry => {
-                csvContent += `"${entry.question1 || ""}";"${entry.question2 || ""}";"${entry.question3 || ""}";"${entry.question4 || ""}";"${entry.question5 || ""}";"${entry.question6 || ""}";"${entry.question7 || ""}";"${entry.question8 || ""}";"${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" | ") : ""}";"${entry.heardBefore || ""}";"${entry.timestamp || ""}"\n`;
+                csvContent += `"${entry.question1 || ""}";"${entry.question2 || ""}";"${entry.question3 || ""}";"${entry.question4 || ""}";"${entry.question5 || ""}";"${entry.question6 || ""}";"${entry.question7 || ""}";"${entry.question8 || ""}";"${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" , ") : ""}";"${entry.heardBefore || ""}";"${entry.timestamp || ""}"\n`;
             });
             const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
             const link = document.createElement("a");
@@ -461,7 +461,7 @@ $("#downloadCSVMac").click(() => {
         success: function(data) {
             let csvContent = "Question1,Question2,Question3,Question4,Question5,Question6,Question7,Question8,Main Tension Data,Heard Before,Timestamp\n";
             data.forEach(entry => {
-                csvContent += `"${entry.question1 || ""}","${entry.question2 || ""}","${entry.question3 || ""}","${entry.question4 || ""}","${entry.question5 || ""}","${entry.question6 || ""}","${entry.question7 || ""}","${entry.question8 || ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" | ") : ""}","${entry.heardBefore || ""}","${entry.timestamp || ""}"\n`;
+                csvContent += `"${entry.question1 || ""}","${entry.question2 || ""}","${entry.question3 || ""}","${entry.question4 || ""}","${entry.question5 || ""}","${entry.question6 || ""}","${entry.question7 || ""}","${entry.question8 || ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" , ") : ""}","${entry.heardBefore || ""}","${entry.timestamp || ""}"\n`;
             });
             const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
             const link = document.createElement("a");
