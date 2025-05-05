@@ -265,7 +265,8 @@
         <tbody></tbody>
       </table>
 
-    <button id="downloadCSV" class="btn btn-secondary mt-3">Download CSV</button>
+    <button id="downloadCSVWindows" class="btn btn-secondary mt-3">Download CSV (Windows - UTF-8, Semicolon)</button>
+    <button id="downloadCSVMac" class="btn btn-secondary mt-3">Download CSV (Mac - UTF-8, Comma)</button>
     <button id="backButtonResults" class="btn btn-primary mt-3">Back</button>
   </div>
 
@@ -424,21 +425,48 @@ $("#viewResultsProtected").click(() => {
 });
 
 // Download CSV
-$("#downloadCSV").click(() => {
+// Windows version (UTF-8 with BOM + Semicolon separator)
+$("#downloadCSVWindows").click(() => {
     $.ajax({
-        url: "https://misc.lmta.lt/tension/server/get-results",
+        url: "/tension/server/get-results",
+        type: "GET",
+        cache: false,
+        headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
+        success: function(data) {
+            let csvContent = "Question1;Question2;Question3;Question4;Question5;Question6;Question7;Question8;Main Tension Data;Heard Before;Timestamp\n";
+            data.forEach(entry => {
+                csvContent += `"${entry.question1 || ""}";"${entry.question2 || ""}";"${entry.question3 || ""}";"${entry.question4 || ""}";"${entry.question5 || ""}";"${entry.question6 || ""}";"${entry.question7 || ""}";"${entry.question8 || ""}";"${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" | ") : ""}";"${entry.heardBefore || ""}";"${entry.timestamp || ""}"\n`;
+            });
+            const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", "experiment_results_windows.csv");
+            document.body.appendChild(link);
+            link.click();
+        },
+        error: function(err) {
+            console.error("Error downloading CSV:", err);
+            alert("Error downloading CSV. Please try again.");
+        }
+    });
+});
+
+// Mac version (UTF-8 with BOM + Comma separator)
+$("#downloadCSVMac").click(() => {
+    $.ajax({
+        url: "/tension/server/get-results",
         type: "GET",
         cache: false,
         headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
         success: function(data) {
             let csvContent = "Question1,Question2,Question3,Question4,Question5,Question6,Question7,Question8,Main Tension Data,Heard Before,Timestamp\n";
             data.forEach(entry => {
-                csvContent += `"${entry.question1 || ""}","${entry.question2 || ""}","${entry.question3 || ""}","${entry.question4 || ""}","${entry.question5 || ""}","${entry.question6 || ""}","${entry.question7 || ""}","${entry.question8 || ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : ""}","${entry.heardBefore || ""}","${entry.timestamp || ""}"\n`;
+                csvContent += `"${entry.question1 || ""}","${entry.question2 || ""}","${entry.question3 || ""}","${entry.question4 || ""}","${entry.question5 || ""}","${entry.question6 || ""}","${entry.question7 || ""}","${entry.question8 || ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" | ") : ""}","${entry.heardBefore || ""}","${entry.timestamp || ""}"\n`;
             });
-            let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-            let link = document.createElement("a");
+            const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
+            const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", "experiment_results.csv");
+            link.setAttribute("download", "experiment_results_mac.csv");
             document.body.appendChild(link);
             link.click();
         },
