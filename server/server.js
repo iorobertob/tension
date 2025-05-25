@@ -24,24 +24,15 @@ app.post("/tension/server/save-results", (req, res) => {
         return res.status(400).send("Invalid or missing data in request body");
     }
 
-    if (questionnaireAnswers.length !== 8) {
-        console.error("Questionnaire must have exactly 8 answers");
-        return res.status(400).send("Questionnaire must have exactly 8 answers");
-    }
+    // Dynamically assign question1, question2, ... questionN
+    const participantData = {};
+    questionnaireAnswers.forEach((answer, index) => {
+        participantData[`question${index + 1}`] = answer;
+    });
 
-    const participantData = {
-        question1: questionnaireAnswers[0],
-        question2: questionnaireAnswers[1],
-        question3: questionnaireAnswers[2],
-        question4: questionnaireAnswers[3],
-        question5: questionnaireAnswers[4],
-        question6: questionnaireAnswers[5],
-        question7: questionnaireAnswers[6],
-        question8: questionnaireAnswers[7],
-        mainTensionData: mainTensionData,
-        heardBefore: heardBefore,
-        timestamp: new Date().toISOString()
-    };
+    participantData.mainTensionData = mainTensionData;
+    participantData.heardBefore = heardBefore;
+    participantData.timestamp = new Date().toISOString();
 
     let results = [];
     try {
@@ -63,7 +54,7 @@ app.post("/tension/server/save-results", (req, res) => {
     res.sendStatus(200);
 });
 
-// Get stored results
+// Serve results as JSON
 app.get("/tension/server/get-results", (req, res) => {
     res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
 
