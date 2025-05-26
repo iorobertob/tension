@@ -150,28 +150,28 @@
   </div>
 
   <div id="stage3" class="hidden">
-    <h2>Pilot Test</h2>
-    <p>Please listen to the example music and adjust the slider based on the tension you perceive.</p>
+    <h2>Bandomasis testas</h2>
+    <p>Klausykitės bandomojo testo muzikos pavyzdžio ir tuo pačiu metu reguliuokite slankiklį pagal jaučiamą įtampą.</p>
     <audio id="pilotAudio" controls>
       <source src="music.pilot.mp3" type="audio/mpeg">
     </audio>
     <div class="mt-3">
       <div class="slider-labels">
-        <span>Low</span>
-        <span>High</span>
+        <span>žemiausia įtampa.</span>
+        <span>aukščiausia įtampa.</span>
       </div>
       <input type="range" id="pilotSlider" class="form-range" min="0" max="1" step="0.01">
     </div>
     <div class="button-group">
-      <button id="toMainTest" class="btn btn-success">Proceed to Main Test</button>
-      <button type="button" class="btn btn-secondary" id="backToStage2">Back</button>
+      <button id="toMainTest" class="btn btn-success">Pereiti prie pagrindinio testo</button>
+      <button type="button" class="btn btn-secondary" id="backToStage2">Atgal</button>
     </div>
   </div>
 
   <!-- STAGE 4 -->
   <div id="stage4" class="hidden">
-    <h2>Main Test</h2>
-    <p>Listen carefully and adjust the slider to reflect the musical tension you feel.</p>
+    <h2>Pagrindinis testas</h2>
+    <p>Atidžiai klausykitės ir reguliuokite slankiklį taip, kad jis atspindėtų jaučiamą muzikinę įtampą.</p>
     <audio id="mainAudio" controls>
       <source src="music.mp3" type="audio/mpeg">
     </audio>
@@ -183,29 +183,29 @@
       <input type="range" id="mainSlider" class="form-range" min="0" max="1" step="0.01">
     </div>
     <div class="mt-4">
-      <label for="heardBefore" class="form-label">Have you heard this piece of music before?</label>
+      <label for="heardBefore" class="form-label">Ar esate girdėję/-usi šį kūrinį anksčiau?</label>
       <select id="heardBefore" class="form-select" required>
-        <option value="">--Please choose an option--</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
+        <option value="">--Pasirinkite variantą.--</option>
+        <option value="yes">Taip</option>
+        <option value="no">Ne</option>
       </select>
     </div>
     <div class="button-group">
-      <button id="finishButton" class="btn btn-primary">Finish</button>
-      <button type="button" class="btn btn-secondary" id="backToStage3">Back</button>
+      <button id="finishButton" class="btn btn-primary">Baigti</button>
+      <button type="button" class="btn btn-secondary" id="backToStage3">Atgal</button>
     </div>
   </div>
 
   <!-- STAGE 5 -->
   <div id="stage5" class="hidden">
-    <h2>Thank You!</h2>
-    <p>Thank you for your participation!</p>
-    <p>If you are interested in the results of the survey, please email: <strong>ausrine.butvydaite@stud.lmta.lt</strong></p>
+    <h2>Ačiū!</h2>
+    <p>Ačiū už Jūsų dalyvavimą!</p>
+    <p>Jei jus domina apklausos rezultatai, rašykite el. paštu: <strong>ausrine.butvydaite@stud.lmta.lt</strong></p>
   </div>
 
   <!-- RESULTS PAGE -->
   <div id="resultsPage" class="hidden">
-    <h2>Experiment Results</h2>
+    <h2>Eksperimento rezultatai</h2>
 
       <table id="resultsTable" class="display nowrap" style="width:100%">
         <thead>
@@ -383,8 +383,13 @@ $("#viewResultsProtected").click(() => {
                         }
                         return value || "";
                     });
-                    table.row.add(row).draw();
+                    // table.row.add(row).draw();
+                    table.row.add(row);
+
                 });
+                table.draw();
+                table.columns.adjust().responsive.recalc();
+
             },
             error: function(err) {
                 console.error("Error loading results:", err);
@@ -398,6 +403,30 @@ $("#viewResultsProtected").click(() => {
 
 // Download CSV
 // Windows version (UTF-8 with BOM + Semicolon separator)
+// $("#downloadCSVWindows").click(() => {
+//     $.ajax({
+//         url: "https://misc.lmta.lt/tension/server/get-results",
+//         type: "GET",
+//         cache: false,
+//         headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
+//         success: function(data) {
+//             let csvContent = "Question1;Question2;Question3;Question4;Question5;Question6;Question7;Question8;Main Tension Data;Heard Before;Timestamp\n";
+//             data.forEach(entry => {
+//                 csvContent += `"${entry.question1 || ""}";"${entry.question2 || ""}";"${entry.question3 || ""}";"${entry.question4 || ""}";"${entry.question5 || ""}";"${entry.question6 || ""}";"${entry.question7 || ""}";"${entry.question8 || ""}";"${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" | ") : ""}";"${entry.heardBefore || ""}";"${entry.timestamp || ""}"\n`;
+//             });
+//             const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
+//             const link = document.createElement("a");
+//             link.href = URL.createObjectURL(blob);
+//             link.setAttribute("download", "experiment_results_windows.csv");
+//             document.body.appendChild(link);
+//             link.click();
+//         },
+//         error: function(err) {
+//             console.error("Error downloading CSV:", err);
+//             alert("Error downloading CSV. Please try again.");
+//         }
+//     });
+// });
 $("#downloadCSVWindows").click(() => {
     $.ajax({
         url: "/tension/server/get-results",
@@ -405,16 +434,7 @@ $("#downloadCSVWindows").click(() => {
         cache: false,
         headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
         success: function(data) {
-            let csvContent = "Question1;Question2;Question3;Question4;Question5;Question6;Question7;Question8;Main Tension Data;Heard Before;Timestamp\n";
-            data.forEach(entry => {
-                csvContent += `"${entry.question1 || ""}";"${entry.question2 || ""}";"${entry.question3 || ""}";"${entry.question4 || ""}";"${entry.question5 || ""}";"${entry.question6 || ""}";"${entry.question7 || ""}";"${entry.question8 || ""}";"${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" | ") : ""}";"${entry.heardBefore || ""}";"${entry.timestamp || ""}"\n`;
-            });
-            const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", "experiment_results_windows.csv");
-            document.body.appendChild(link);
-            link.click();
+            downloadCSV(data, ";", "experiment_results_windows.csv");
         },
         error: function(err) {
             console.error("Error downloading CSV:", err);
@@ -423,24 +443,42 @@ $("#downloadCSVWindows").click(() => {
     });
 });
 
+
 // Mac version (UTF-8 with BOM + Comma separator)
+// $("#downloadCSVMac").click(() => {
+//     $.ajax({
+//         url: "https://misc.lmta.lt/tension/server/get-results",
+//         type: "GET",
+//         cache: false,
+//         headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
+//         success: function(data) {
+//             let csvContent = "Question1,Question2,Question3,Question4,Question5,Question6,Question7,Question8,Main Tension Data,Heard Before,Timestamp\n";
+//             data.forEach(entry => {
+//                 csvContent += `"${entry.question1 || ""}","${entry.question2 || ""}","${entry.question3 || ""}","${entry.question4 || ""}","${entry.question5 || ""}","${entry.question6 || ""}","${entry.question7 || ""}","${entry.question8 || ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" , ") : ""}","${entry.heardBefore || ""}","${entry.timestamp || ""}"\n`;
+//             });
+//             const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
+//             const link = document.createElement("a");
+//             link.href = URL.createObjectURL(blob);
+//             link.setAttribute("download", "experiment_results_mac.csv");
+//             document.body.appendChild(link);
+//             link.click();
+//         },
+//         error: function(err) {
+//             console.error("Error downloading CSV:", err);
+//             alert("Error downloading CSV. Please try again.");
+//         }
+//     });
+// });
+
+// Mac CSV: UTF-8 BOM + Comma
 $("#downloadCSVMac").click(() => {
     $.ajax({
-        url: "/tension/server/get-results",
+        url: "https://misc.lmta.lt/tension/server/get-results",
         type: "GET",
         cache: false,
         headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
         success: function(data) {
-            let csvContent = "Question1,Question2,Question3,Question4,Question5,Question6,Question7,Question8,Main Tension Data,Heard Before,Timestamp\n";
-            data.forEach(entry => {
-                csvContent += `"${entry.question1 || ""}","${entry.question2 || ""}","${entry.question3 || ""}","${entry.question4 || ""}","${entry.question5 || ""}","${entry.question6 || ""}","${entry.question7 || ""}","${entry.question8 || ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" , ") : ""}","${entry.heardBefore || ""}","${entry.timestamp || ""}"\n`;
-            });
-            const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", "experiment_results_mac.csv");
-            document.body.appendChild(link);
-            link.click();
+            downloadCSV(data, ",", "experiment_results_mac.csv");
         },
         error: function(err) {
             console.error("Error downloading CSV:", err);
@@ -448,6 +486,39 @@ $("#downloadCSVMac").click(() => {
         }
     });
 });
+
+function downloadCSV(data, delimiter, filename) {
+    if (!Array.isArray(data) || data.length === 0) {
+        alert("No data available.");
+        return;
+    }
+
+    // Determine all unique keys (columns) across all rows
+    const allKeys = Array.from(
+        new Set(data.flatMap(entry => Object.keys(entry)))
+    );
+
+    // Generate CSV header
+    let csvContent = allKeys.join(delimiter) + "\n";
+
+    // Generate CSV rows
+    data.forEach(entry => {
+        const row = allKeys.map(key => {
+            let val = entry[key];
+            if (Array.isArray(val)) return `"${val.join(" | ")}"`;
+            return `"${val !== undefined ? val : ""}"`;
+        });
+        csvContent += row.join(delimiter) + "\n";
+    });
+
+    const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 </script>
 
 
