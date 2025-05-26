@@ -153,7 +153,7 @@
     <h2>Pilot Test</h2>
     <p>Please listen to the example music and adjust the slider based on the tension you perceive.</p>
     <audio id="pilotAudio" controls>
-      <source src="music.mp3" type="audio/mpeg">
+      <source src="music.pilot.mp3" type="audio/mpeg">
     </audio>
     <div class="mt-3">
       <div class="slider-labels">
@@ -354,25 +354,36 @@ $("#viewResultsProtected").click(() => {
             cache: false,
             headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
             success: function(data) {
+                if (!Array.isArray(data) || data.length === 0) {
+                    alert("No results found.");
+                    return;
+                }
+
+                // Dynamically determine columns from the first result
+                const firstEntry = data[0];
+                const columnKeys = Object.keys(firstEntry);
+                const columnHeaders = columnKeys.map(key => `<th>${key}</th>`).join("");
+
+                // Inject dynamic headers into the table
+                $("#resultsTable thead").html(`<tr>${columnHeaders}</tr>`);
+
+                // Initialize DataTable
                 let table = $('#resultsTable').DataTable({
                     destroy: true,
-                    responsive: true // <<< make it automatically collapse when table is too wide
+                    responsive: true
                 });
                 table.clear();
+
+                // Add each row
                 data.forEach(entry => {
-                    table.row.add([
-                        entry.question1 || "",
-                        entry.question2 || "",
-                        entry.question3 || "",
-                        entry.question4 || "",
-                        entry.question5 || "",
-                        entry.question6 || "",
-                        entry.question7 || "",
-                        entry.question8 || "",
-                        Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(", ") : "",
-                        entry.heardBefore || "",
-                        entry.timestamp || "" 
-                    ]).draw();
+                    const row = columnKeys.map(key => {
+                        let value = entry[key];
+                        if (Array.isArray(value)) {
+                            return value.join(", ");
+                        }
+                        return value || "";
+                    });
+                    table.row.add(row).draw();
                 });
             },
             error: function(err) {
