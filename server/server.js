@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 const fs = require("fs");
 const cors = require("cors");
 const path = require("path");
@@ -7,6 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const upload = multer({ dest: "../" });
+
 const RESULTS_FILE = path.join(__dirname, "results.json");
 
 // Ensure results.json exists
@@ -14,6 +17,24 @@ if (!fs.existsSync(RESULTS_FILE)) {
     fs.writeFileSync(RESULTS_FILE, "[]", "utf8");
     console.log("Created missing results.json");
 }
+
+app.post("/tension/server/upload-audio", upload.fields([{ name: "pilotFile" }, { name: "mainFile" }]), (req, res) => {
+  const pilotFile = req.files.pilotFile?.[0];
+  const mainFile = req.files.mainFile?.[0];
+
+  try {
+    if (pilotFile) {
+      fs.renameSync(pilotFile.path, path.join(__dirname, "../music.pilot.mp3"));
+    }
+    if (mainFile) {
+      fs.renameSync(mainFile.path, path.join(__dirname, "../music.mp3"));
+    }
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failų įrašymo klaida.");
+  }
+});
 
 // Save user results
 app.post("/tension/server/save-results", (req, res) => {

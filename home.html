@@ -229,6 +229,21 @@
     <button id="downloadCSVWindows" class="btn btn-secondary mt-3">Download CSV (Windows - UTF-8, Semicolon)</button>
     <button id="downloadCSVMac" class="btn btn-secondary mt-3">Download CSV (Mac - UTF-8, Comma)</button>
     <button id="backButtonResults" class="btn btn-primary mt-3">Back</button>
+    <br>
+    <br>
+    <hr>
+    <h4>Atnaujinti garso failus</h4>
+    <form id="audioUploadForm" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="pilotFile" class="form-label">Bandomasis testas (music.pilot.mp3)</label>
+        <input type="file" class="form-control" id="pilotFile" name="pilotFile" accept="audio/mp3">
+      </div>
+      <div class="mb-3">
+        <label for="mainFile" class="form-label">Pagrindinis testas (music.mp3)</label>
+        <input type="file" class="form-control" id="mainFile" name="mainFile" accept="audio/mp3">
+      </div>
+      <button type="submit" class="btn btn-danger">Įkelti naujus garso failus</button>
+    </form>
   </div>
 
 </div>
@@ -519,6 +534,38 @@ function downloadCSV(data, delimiter, filename) {
     link.click();
     document.body.removeChild(link);
 }
+
+$("#audioUploadForm").submit(function(event) {
+  event.preventDefault();
+
+  const formData = new FormData();
+  const pilotFile = $("#pilotFile")[0].files[0];
+  const mainFile = $("#mainFile")[0].files[0];
+
+  if (pilotFile) formData.append("pilotFile", pilotFile);
+  if (mainFile) formData.append("mainFile", mainFile);
+
+  if (!pilotFile && !mainFile) {
+    alert("Pasirinkite bent vieną failą įkėlimui.");
+    return;
+  }
+
+  $.ajax({
+    url: "https://misc.lmta.lt/tension/server/upload-audio", // <-- adjust this endpoint on the backend
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function () {
+      alert("Failai sėkmingai atnaujinti!");
+    },
+    error: function (err) {
+      console.error("Klaida įkeliant failus:", err);
+      alert("Klaida įkeliant failus. Bandykite dar kartą.");
+    }
+  });
+});
+
 </script>
 
 
