@@ -70,27 +70,37 @@
     <form id="questionnaireForm">
 
         <div class="mb-3">
-          <label class="form-label">1. Koks Jūsų amžius? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="Nurodykite skaičiais.">❓</span></label>
+          <label class="form-label"><b>1. Ar sutinkate dalyvauti virtualiame akustiniame eksperimente? </b></label>
+          <select class="form-select question" required>
+            <option value="">Pasirinkite</option>
+            <option value="Taip">Taip</option>
+            <option value="Ne">Ne</option>
+          </select>
+        </div>
+
+
+        <div class="mb-3">
+          <label class="form-label">2. Koks Jūsų amžius? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="Nurodykite skaičiais.">❓</span></label>
           <input type="number" class="form-control question" required>
         </div>
         
         <div class="mb-3">
-          <label class="form-label">2. Nuo kokio amžiaus pradėjote reguliariai mokytis muzikos? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="(t.y., reguliarios muzikos pamokos arba kasdienė muzikinė praktika, trunkanti ne mažiau kaip 3 metus iš eilės).  Jei reguliariai nesimokėte muzikos, įrašykite 0.">❓</span></label>
+          <label class="form-label">3. Nuo kokio amžiaus pradėjote reguliariai mokytis muzikos? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="(t.y., reguliarios muzikos pamokos arba kasdienė muzikinė praktika, trunkanti ne mažiau kaip 3 metus iš eilės).  Jei reguliariai nesimokėte muzikos, įrašykite 0.">❓</span></label>
           <input type="number" class="form-control question" required>
         </div>
         
         <div class="mb-3">
-          <label class="form-label">3. Kiek metų lankėte privačias muzikos pamokas arba mokyklinius muzikinius būrelius? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="Jei mokėtės groti daugiau nei vienu instrumentu, įskaitant dainavimą, nurodykite ilgiausiai groto instrumento/dainavimo metus. Jei niekada nelankėte privačių pamokų ar mokyklinių muzikinių būrelių, įrašykite 0.">❓</span></label>
+          <label class="form-label">4. Kiek metų lankėte privačias muzikos pamokas arba mokyklinius muzikinius būrelius? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="Jei mokėtės groti daugiau nei vienu instrumentu, įskaitant dainavimą, nurodykite ilgiausiai groto instrumento/dainavimo metus. Jei niekada nelankėte privačių pamokų ar mokyklinių muzikinių būrelių, įrašykite 0.">❓</span></label>
           <input type="number" class="form-control question" required>
         </div>
         
         <div class="mb-3">
-          <label class="form-label">4. Kiek metų trunka / truko jūsų reguliari kasdienė grojimo muzikos instrumentu ar dainavimo praktika? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="Kasdieninė praktika gali būti apibrėžta kaip bent 5 kartai per savaitę. Metų laikotarpis gali būti apibrėžtas kaip 10-12 mėn.  Jeigu niekada nesipraktikavote reguliariai arba praktikavote mažiau nei 10 mėn., įrašykite 0.">❓</span></label>
+          <label class="form-label">5. Kiek metų trunka / truko jūsų reguliari kasdienė grojimo muzikos instrumentu ar dainavimo praktika? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="Kasdieninė praktika gali būti apibrėžta kaip bent 5 kartai per savaitę. Metų laikotarpis gali būti apibrėžtas kaip 10-12 mėn.  Jeigu niekada nesipraktikavote reguliariai arba praktikavote mažiau nei 10 mėn., įrašykite 0.">❓</span></label>
           <input type="number" class="form-control question" required>
         </div>
         
         <div class="mb-3">
-          <label class="form-label">5. Kiek laiko skiriate grojimui muzikos instrumentu ar dainavimui? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="Turima omenyje ne grupinė, bet individuali praktika su mokytoju arba savarankiškai. Pasirinkite vieną labiausiai jums tinkantį atsakymą.">❓</span></label>
+          <label class="form-label">6. Kiek laiko skiriate grojimui muzikos instrumentu ar dainavimui? <span class="ms-1 text-primary" data-bs-toggle="tooltip" style="cursor: help;" title="Turima omenyje ne grupinė, bet individuali praktika su mokytoju arba savarankiškai. Pasirinkite vieną labiausiai jums tinkantį atsakymą.">❓</span></label>
           <select class="form-select question" required>
             <option value="">Pasirinkite</option>
             <option value="Aš niekada neskiriu laiko grojimui ar dainavimui arba retai skiriu laiko grojimui ir dainavimui.">Aš niekada neskiriu laiko grojimui ar dainavimui arba retai skiriu laiko grojimui ir dainavimui.</option><option value="Maždaug 1 val. per mėnesį.">Maždaug 1 val. per mėnesį.</option><option value="Maždaug 1 val. per savaitę.">Maždaug 1 val. per savaitę.</option><option value="Kasdien apie 15 minučių.">Kasdien apie 15 minučių.</option><option value="Kasdien apie 1 val.">Kasdien apie 1 val.</option><option value="Kasdien daugiau nei 2 val.">Kasdien daugiau nei 2 val.</option>
@@ -98,7 +108,7 @@
         </div>
         
         <div class="mb-3">
-          <label class="form-label">6. Ar kada nors lankėte kokias nors su muzika susijusias paskaitas kolegijoje, universitete ar akademijoje? </label>
+          <label class="form-label">7. Ar kada nors lankėte kokias nors su muzika susijusias paskaitas kolegijoje, universitete ar akademijoje? </label>
           <select class="form-select question" required>
             <option value="">Pasirinkite</option>
             <option value="Taip">Taip</option>
@@ -107,7 +117,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">7. Kokį muzikinį išsilavinimą esate pasiekęs?</label>
+          <label class="form-label">8. Kokį muzikinį išsilavinimą esate pasiekęs?</label>
           <select class="form-select question" required>
             <option value="">Pasirinkite</option>
             <option value="Jokio.">Jokio.</option><option value="Esu baigęs/-usi muzikos mokyklą (7 metai ar 10 metų).">Esu baigęs/-usi muzikos mokyklą (7 metai ar 10 metų).</option><option value="Esu baigęs/-usi konservatoriją arba menų mokyklą.">Esu baigęs/-usi konservatoriją arba menų mokyklą.</option><option value="Esu baigęs/-usi 1 bakalauro kursą.">Esu baigęs/-usi 1 bakalauro kursą.</option><option value="Esu baigęs/-usi 2 bakalauro kursą.">Esu baigęs/-usi 2 bakalauro kursą.</option><option value="Esu baigęs/-usi 3 bakalauro kursą.">Esu baigęs/-usi 3 bakalauro kursą.</option><option value="Esu baigęs/-usi 4 bakalauro kursą.">Esu baigęs/-usi 4 bakalauro kursą.</option><option value="Esu įgijęs/-usi muzikos srities magistro arba daktaro laipsnį.">Esu įgijęs/-usi muzikos srities magistro arba daktaro laipsnį.</option>
@@ -115,7 +125,7 @@
         </div>
         
         <div class="mb-3">
-          <label class="form-label">8. Koks atsakymas geriausiai apibūdina Jūsų patirtį komponuojant/kuriant muziką?</label>
+          <label class="form-label">9. Koks atsakymas geriausiai apibūdina Jūsų patirtį komponuojant/kuriant muziką?</label>
           <select class="form-select question" required>
             <option value="">Pasirinkite</option>
             <option value="Niekada nekūriau muzikos.">Niekada nekūriau muzikos.</option><option value="Esu komponavęs/-usi nedaug kūrinių, tačiau taip jų ir neužbaigęs/-usi.">Esu komponavęs/-usi nedaug kūrinių, tačiau taip jų ir neužbaigęs/-usi.</option><option value="Esu komponavęs/-usi vieną arba daugiau kūrinių, kurie pilnai užbaigti, tačiau nebuvo viešai atliekami.">Esu komponavęs/-usi vieną arba daugiau kūrinių, kurie pilnai užbaigti, tačiau nebuvo viešai atliekami.</option><option value="Esu sukūręs/-usi kūrinius, kurie buvo atlikti viešai auditorijai.">Esu sukūręs/-usi kūrinius, kurie buvo atlikti viešai auditorijai.</option><option value="Esu sukūręs/-usi kūrinius, kurie buvo atlikti regioniniu, tarptautiniu mastu (pvz., atliko regioniniu, tarptautiniu mastu žinomas atlikėjas, kolektyvas, ansamblis, orkestras.).">Esu sukūręs/-usi kūrinius, kurie buvo atlikti regioniniu, tarptautiniu mastu (pvz., atliko regioniniu, tarptautiniu mastu žinomas atlikėjas, kolektyvas, ansamblis, orkestras.).</option>
@@ -123,7 +133,7 @@
         </div>
         
         <div class="mb-3">
-          <label class="form-label">9. Kiek gyvo garso koncertų aplankėte per pastaruosius 12 mėnesių? Gali būti bet kokio žanro koncertai.</label>
+          <label class="form-label">10. Kiek gyvo garso koncertų aplankėte per pastaruosius 12 mėnesių? Gali būti bet kokio žanro koncertai.</label>
           <select class="form-select question" required>
             <option value="">Pasirinkite</option>
             <option value="Iš viso neapsilankiau.">Iš viso neapsilankiau.</option>
@@ -135,7 +145,7 @@
         </div>
         
         <div class="mb-3">
-          <label class="form-label">10. Kuris įvardinimas geriausiai Jus apibūdina?</label>
+          <label class="form-label">11. Kuris įvardinimas geriausiai Jus apibūdina?</label>
           <select class="form-select question" required>
             <option value="">Pasirinkite</option>
             <option value="Nesu muzikantas/-ė (žmogus, kuris neturi formalaus muzikinio išsilavinimo arba turi menką muzikinį pasiruošimą. Muziką jis/ji mėgsta kaip klausytojas, tačiau nesidomi jos praktikavimu ar muzikos teorija).">Nesu muzikantas/-ė (žmogus, kuris neturi formalaus muzikinio išsilavinimo arba turi menką muzikinį pasiruošimą. Muziką jis/ji mėgsta kaip klausytojas, tačiau nesidomi jos praktikavimu ar muzikos teorija).</option><option value="Muzikos mėgėjas/-a nemuzikantas/-ė (žmogus, kuris labai mėgsta ir domisi muzika. Jos aktyviai klausosi bei ją analizuoja, tačiau formaliai nestudijuoja muzikos ir neužsiima jos praktikavimu).">Muzikos mėgėjas/-a nemuzikantas/-ė (žmogus, kuris labai mėgsta ir domisi muzika. Jos aktyviai klausosi bei ją analizuoja, tačiau formaliai nestudijuoja muzikos ir neužsiima jos praktikavimu).</option><option value="Muzikantas/-ė mėgėjas/-a (žmogus, kuris groja arba užsiima muzika savo malonumui, bet ne dėl karjeros. Tai prilygsta asmeniniam pomėgiui).">Muzikantas/-ė mėgėjas/-a (žmogus, kuris groja arba užsiima muzika savo malonumui, bet ne dėl karjeros. Tai prilygsta asmeniniam pomėgiui).</option><option value="Pažengęs/-usi muzikantas/-ė mėgėjas/-a (žmogus, kuris daug laiko skiria muzikinei veiklai bei tobulina įgūdžius, tačiau tai ne profesinė veikla).">Pažengęs/-usi muzikantas/-ė mėgėjas/-a (žmogus, kuris daug laiko skiria muzikinei veiklai bei tobulina įgūdžius, tačiau tai ne profesinė veikla).</option><option value="Pusiau profesionalus/-i muzikantas/-ė  (žmogus, kuris formaliai studijuoja muziką arba dalinai  iš jos užsidirba pragyvenimui, tačiau tai dar ne pagrindinė profesija).">Pusiau profesionalus/-i muzikantas/-ė  (žmogus, kuris formaliai studijuoja muziką arba dalinai  iš jos užsidirba pragyvenimui, tačiau tai dar ne pagrindinė profesija).</option><option value="Profesionalus/-i muzikantas/-ė (žmogus, kurio pagrindinė profesinė veikla, susijusi su muzika).">Profesionalus/-i muzikantas/-ė (žmogus, kurio pagrindinė profesinė veikla, susijusi su muzika).</option>
@@ -160,7 +170,7 @@
         <span>žemiausia įtampa.</span>
         <span>aukščiausia įtampa.</span>
       </div>
-      <input type="range" id="pilotSlider" class="form-range" min="0" max="1" step="0.01">
+      <input type="range" id="pilotSlider" class="form-range" min="0" max="1" step="0.01" value=0>
     </div>
     <div class="button-group">
       <button id="toMainTest" class="btn btn-success">Pereiti prie pagrindinio testo</button>
@@ -180,7 +190,7 @@
         <span>žemiausia įtampa.</span>
         <span>aukščiausia įtampa.</span>
       </div>
-      <input type="range" id="mainSlider" class="form-range" min="0" max="1" step="0.01">
+      <input type="range" id="mainSlider" class="form-range" min="0" max="1" step="0.01" value=0>
     </div>
     <div class="mt-4">
       <label for="heardBefore" class="form-label">Ar esate girdėję/-usi šį kūrinį anksčiau?</label>
@@ -196,12 +206,41 @@
     </div>
   </div>
 
-  <!-- STAGE 5 -->
-  <div id="stage5" class="hidden">
-    <h2>Ačiū!</h2>
-    <p>Ačiū už Jūsų dalyvavimą!</p>
-    <p>Jei jus domina apklausos rezultatai, rašykite el. paštu: <strong>ausrine.butvydaite@stud.lmta.lt</strong></p>
+  <!-- STAGE 5: Second Test -->
+<div id="stage5" class="hidden">
+  <h2>Antrasis testas</h2>
+  <p>Klausykitės ir reguliuokite slankiklį pagal muzikinę įtampą.</p>
+  <audio id="secondaryAudio" controls>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+  <div class="mt-3">
+    <div class="slider-labels">
+      <span>žemiausia įtampa.</span>
+      <span>aukščiausia įtampa.</span>
+    </div>
+    <input type="range" id="secondarySlider" class="form-range" min="0" max="1" step="0.01" value="0">
   </div>
+  <div class="mt-4">
+    <label for="heardBefore2" class="form-label">Ar esate girdėję/-usi šį antrąjį kūrinį anksčiau?</label>
+    <select id="heardBefore2" class="form-select" required>
+      <option value="">--Pasirinkite variantą.--</option>
+      <option value="yes">Taip</option>
+      <option value="no">Ne</option>
+    </select>
+  </div>
+  <div class="button-group">
+    <button id="finishSecondaryButton" class="btn btn-primary">Baigti</button>
+    <button type="button" class="btn btn-secondary" id="backToStage4">Atgal</button>
+  </div>
+</div>
+
+<!-- STAGE 6: Thank you -->
+<div id="stage6" class="hidden">
+  <h2>Ačiū!</h2>
+  <p>Ačiū už Jūsų dalyvavimą!</p>
+  <p>Jei jus domina apklausos rezultatai, rašykite el. paštu: <strong>ausrine.butvydaite@stud.lmta.lt</strong></p>
+</div>
+
 
   <!-- RESULTS PAGE -->
   <div id="resultsPage" class="hidden">
@@ -244,15 +283,32 @@
       </div>
       <button type="submit" class="btn btn-danger">Įkelti naujus garso failus</button>
     </form>
+
+    <!-- Upload new description -->
+    <form id="uploadDescriptionForm" enctype="multipart/form-data">
+      <input type="file" name="descriptionFile" accept=".txt" class="form-control" required>
+      <button type="submit" class="btn btn-primary mt-2">Upload New Description</button>
+    </form>
+
+    <!-- Upload new questions -->
+    <form id="uploadQuestionsForm" enctype="multipart/form-data" class="mt-3">
+      <input type="file" name="questionsFile" accept=".json" class="form-control" required>
+      <button type="submit" class="btn btn-primary mt-2">Upload New Questions</button>
+    </form>
   </div>
 
 </div>
 
 <script>
 let mainTensionData = [];
-let questionnaireAnswers = [];
-let mainInterval = null;
-const allowRetake = true;
+let mainInterval    = null;
+
+let questionnaireAnswers  = [];
+const allowRetake         = true;
+
+let secondaryTensionData  = [];
+let secondaryInterval     = null;
+
 
 // Prevent retake
 if (!allowRetake && localStorage.getItem("testCompleted") === "true") {
@@ -261,9 +317,9 @@ if (!allowRetake && localStorage.getItem("testCompleted") === "true") {
 
 // Progress bar updater
 function updateProgress(step) {
-    let percent = step * 20;
-    $("#progressBar").css("width", percent + "%");
-    $("#progressBar").text(`Step ${step} of 5`);
+  let percent = step * (100 / 6);
+  $("#progressBar").css("width", percent + "%");
+  $("#progressBar").text(`Step ${step} of 6`);
 }
 
 // Navigation between stages
@@ -292,35 +348,11 @@ $("#toMainTest").click(() => {
 });
 
 $("#finishButton").click(() => {
-    const heardBefore = $("#heardBefore").val();
-    if (!heardBefore) {
-        alert("Please answer if you have heard the piece before.");
-        return;
-    }
-    document.getElementById("mainAudio").pause();  // Stop main audio
-    clearInterval(mainInterval);
-
-    // Save to server (only questionnaire + main tension + heardBefore)
-    $.ajax({
-        url: "https://misc.lmta.lt/tension/server/save-results",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            questionnaireAnswers: questionnaireAnswers,
-            mainTensionData: mainTensionData,
-            heardBefore: heardBefore
-        }),
-        success: function() {
-            localStorage.setItem("testCompleted", "true");
-            $("#stage4").addClass("hidden");
-            $("#stage5").removeClass("hidden");
-            updateProgress(5);
-        },
-        error: function(err) {
-            console.error("Error saving results:", err);
-            alert("Error saving your results. Please try again.");
-        }
-    });
+  document.getElementById("mainAudio").pause();  // Stop main audio
+  $("#stage4").addClass("hidden");
+  $("#stage5").removeClass("hidden");
+  updateProgress(5);
+  clearInterval(mainInterval);
 });
 
 // Back buttons
@@ -339,11 +371,17 @@ $("#backToStage3").click(() => {
     $("#stage3").removeClass("hidden");
     updateProgress(3);
 });
+$("#backToStage4").click(() => {
+  $("#stage5").addClass("hidden");
+  $("#stage4").removeClass("hidden");
+  updateProgress(4);
+});
 $("#backButtonResults").click(() => {
     $("#resultsPage").addClass("hidden");
     $("#stage1").removeClass("hidden");
     updateProgress(1);
 });
+
 
 // Collect main tension every 500ms
 $("#mainAudio").on("play", () => {
@@ -355,6 +393,46 @@ $("#mainAudio").on("play", () => {
 $("#mainAudio").on("ended", () => {
     clearInterval(mainInterval);
 });
+
+
+$("#secondaryAudio").on("play", () => {
+  secondaryTensionData = [];
+  secondaryInterval = setInterval(() => {
+    secondaryTensionData.push($("#secondarySlider").val());
+  }, 500);
+});
+$("#secondaryAudio").on("ended", () => {
+    clearInterval(secondaryInterval);
+});
+
+$("#finishSecondaryButton").click(() => {
+
+  document.getElementById("secondaryAudio").pause();
+  clearInterval(secondaryInterval);
+
+  $.ajax({
+    url: "/tension/server/save-results",
+    type: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({
+      questionnaireAnswers,
+      mainTensionData,
+      secondaryTensionData,
+    }),
+    success: function () {
+      localStorage.setItem("testCompleted", "true");
+      $("#stage5").addClass("hidden");
+      $("#stage6").removeClass("hidden");
+      updateProgress(6);
+    },
+    error: function (err) {
+      console.error("Error saving final results:", err);
+      alert("Klaida saugant testą.");
+    }
+  });
+});
+
+
 
 // View results protected by password
 $("#viewResultsProtected").click(() => {
@@ -416,32 +494,7 @@ $("#viewResultsProtected").click(() => {
     }
 });
 
-// Download CSV
-// Windows version (UTF-8 with BOM + Semicolon separator)
-// $("#downloadCSVWindows").click(() => {
-//     $.ajax({
-//         url: "https://misc.lmta.lt/tension/server/get-results",
-//         type: "GET",
-//         cache: false,
-//         headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
-//         success: function(data) {
-//             let csvContent = "Question1;Question2;Question3;Question4;Question5;Question6;Question7;Question8;Main Tension Data;Heard Before;Timestamp\n";
-//             data.forEach(entry => {
-//                 csvContent += `"${entry.question1 || ""}";"${entry.question2 || ""}";"${entry.question3 || ""}";"${entry.question4 || ""}";"${entry.question5 || ""}";"${entry.question6 || ""}";"${entry.question7 || ""}";"${entry.question8 || ""}";"${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" | ") : ""}";"${entry.heardBefore || ""}";"${entry.timestamp || ""}"\n`;
-//             });
-//             const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
-//             const link = document.createElement("a");
-//             link.href = URL.createObjectURL(blob);
-//             link.setAttribute("download", "experiment_results_windows.csv");
-//             document.body.appendChild(link);
-//             link.click();
-//         },
-//         error: function(err) {
-//             console.error("Error downloading CSV:", err);
-//             alert("Error downloading CSV. Please try again.");
-//         }
-//     });
-// });
+
 $("#downloadCSVWindows").click(() => {
     $.ajax({
         url: "/tension/server/get-results",
@@ -459,31 +512,7 @@ $("#downloadCSVWindows").click(() => {
 });
 
 
-// Mac version (UTF-8 with BOM + Comma separator)
-// $("#downloadCSVMac").click(() => {
-//     $.ajax({
-//         url: "https://misc.lmta.lt/tension/server/get-results",
-//         type: "GET",
-//         cache: false,
-//         headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
-//         success: function(data) {
-//             let csvContent = "Question1,Question2,Question3,Question4,Question5,Question6,Question7,Question8,Main Tension Data,Heard Before,Timestamp\n";
-//             data.forEach(entry => {
-//                 csvContent += `"${entry.question1 || ""}","${entry.question2 || ""}","${entry.question3 || ""}","${entry.question4 || ""}","${entry.question5 || ""}","${entry.question6 || ""}","${entry.question7 || ""}","${entry.question8 || ""}","${Array.isArray(entry.mainTensionData) ? entry.mainTensionData.join(" , ") : ""}","${entry.heardBefore || ""}","${entry.timestamp || ""}"\n`;
-//             });
-//             const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
-//             const link = document.createElement("a");
-//             link.href = URL.createObjectURL(blob);
-//             link.setAttribute("download", "experiment_results_mac.csv");
-//             document.body.appendChild(link);
-//             link.click();
-//         },
-//         error: function(err) {
-//             console.error("Error downloading CSV:", err);
-//             alert("Error downloading CSV. Please try again.");
-//         }
-//     });
-// });
+
 
 // Mac CSV: UTF-8 BOM + Comma
 $("#downloadCSVMac").click(() => {
@@ -551,7 +580,7 @@ $("#audioUploadForm").submit(function(event) {
   }
 
   $.ajax({
-    url: "https://misc.lmta.lt/tension/server/upload-audio", // <-- adjust this endpoint on the backend
+    url: "https://misc.lmta.lt/tension/server/upload-audio", // <--upload endpoint
     type: "POST",
     data: formData,
     processData: false,
@@ -566,6 +595,7 @@ $("#audioUploadForm").submit(function(event) {
   });
 });
 
+
 </script>
 
 
@@ -576,6 +606,7 @@ document.addEventListener("DOMContentLoaded", function () {
     new bootstrap.Tooltip(tooltipTriggerEl);
   });
 });
+
 </script>
 
 </body>

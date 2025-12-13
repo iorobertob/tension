@@ -38,9 +38,9 @@ app.post("/tension/server/upload-audio", upload.fields([{ name: "pilotFile" }, {
 
 // Save user results
 app.post("/tension/server/save-results", (req, res) => {
-    const { questionnaireAnswers, mainTensionData, heardBefore } = req.body;
+    const { questionnaireAnswers, mainTensionData, secondaryTensionData } = req.body;
 
-    if (!Array.isArray(questionnaireAnswers) || !Array.isArray(mainTensionData) || typeof heardBefore !== "string") {
+    if (!Array.isArray(questionnaireAnswers) || !Array.isArray(mainTensionData) || !Array.isArray(secondaryTensionData)) {
         console.error("Invalid or missing data in request body");
         return res.status(400).send("Invalid or missing data in request body");
     }
@@ -51,8 +51,8 @@ app.post("/tension/server/save-results", (req, res) => {
         participantData[`question${index + 1}`] = answer;
     });
 
-    participantData.mainTensionData = mainTensionData;
-    participantData.heardBefore = heardBefore;
+    participantData.mainTensionData      = mainTensionData      || [];
+    participantData.secondaryTensionData = secondaryTensionData || [];
     participantData.timestamp = new Date().toISOString();
 
     let results = [];

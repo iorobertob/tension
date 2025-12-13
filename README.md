@@ -31,7 +31,7 @@ This project consists of:
 
 2. **Install required libraries**:
 ```bash
-npm install express cors
+npm install express cors multer
 ```
 
 3. **Start the server** from the `/server/` folder:
@@ -57,6 +57,7 @@ http://localhost:4000/tension/index.html
 3. **Install required packages**:
 ```bash
 npm install express cors
+npm install multer
 ```
 
 4. **Run the server**:
