@@ -43,7 +43,7 @@ node server.js
 ```
 http://localhost:4000/tension/index.html
 ```
-
+or look for the home.html file in the project and open it in a browser.
 ---
 
 ##  Deploying on a Server
